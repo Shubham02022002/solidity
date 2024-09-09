@@ -10,11 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@solana-developers/helpers": "^2.4.0",
+    "@solana-developers/helpers": "^2.5.4",
     "@solana/web3.js": "^1.95.2",
     "bs58": "^6.0.0",
-    "dotenv": "^16.4.5",
     "esrun": "^3.2.26",
     "typescript": "^5.5.4"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5"
   }
 }

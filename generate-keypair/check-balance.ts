@@ -1,49 +1,36 @@
-// import {
-//   Connection,
-  //   PublicKey,
-//   LAMPORTS_PER_SOL,
-// } from "@solana/web3.js";
+import {
+  clusterApiUrl,
+  Connection,
+  LAMPORTS_PER_SOL,
+  PublicKey,
+} from "@solana/web3.js";
 
-// const suppliedPublicKey=process.argv[2];
+async function checkBalance() {
+  const publicAddress = process.argv[2];
+  if (!publicAddress) {
+    throw new Error("Please provide a public address to check balance of !");
+  }
 
-// if(!suppliedPublicKey){
-//     throw new Error(`Please provide a public key to check the balance of!`);
-// }
+  if (publicAddress.length !== 44) {
+    throw new Error(
+      "Please provide a valid public address to check balance of!"
+    );
+  }
 
-// const isBase58 = (suppliedPublicKey: string)=> /^[A-HJ-NP-Za-km-z1-9]*$/.test(suppliedPublicKey);
+  const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
-// if((suppliedPublicKey.length>44) || !isBase58(suppliedPublicKey)){
-//     throw new Error("Invalid wallet address!");
-// }
+  const publicKey = new PublicKey(publicAddress);
 
-// const publicKey = new PublicKey(suppliedPublicKey);
+  try {
+    const balanceInLamports = await connection.getBalance(publicKey);
+    const balanceInSOL = balanceInLamports / LAMPORTS_PER_SOL;
 
-// const connection = new Connection("https://api.mainnet-beta.solana.com", "confirmed");
+    console.log(
+      `💰 Finished! The balance for the wallet at address ${publicKey.toBase58()} is ${balanceInSOL} SOL!`
+    );
+  } catch (error) {
+    console.error("Error fetching balance:", error);
+  }
+}
 
-// const balanceInLamports = await connection.getBalance(publicKey);
-
-// const balanceInSOL= balanceInLamports/LAMPORTS_PER_SOL;
-
-// console.log(
-//     `💰 Finished! The balance for the wallet at address ${publicKey} is ${balanceInSOL}!`,
-//   );
-
-// import { Keypair } from "@solana/web3.js";
-
-// const keypair = Keypair.generate();
-
-// console.log(`The public key is: `, keypair.publicKey.toBase58());
-// console.log(`The secret key is: `, keypair.secretKey);
-// console.log(`✅ Finished!`);
-
-import "dotenv/config";
-import { getKeypairFromEnvironment } from "@solana-developers/helpers";
-import { configDotenv } from "dotenv";
-configDotenv();
-const secretKey = process.env.SECRET_KEY;
-
-const keypair = getKeypairFromEnvironment(`${secretKey}`);
-
-console.log(
-  `✅ Finished! We've loaded our secret key securely, using an env file!`
-);
+checkBalance();
