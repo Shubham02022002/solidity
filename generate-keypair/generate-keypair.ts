@@ -1,13 +1,7 @@
 import { Keypair } from "@solana/web3.js";
-import fs from "fs";
-
-const secret = JSON.parse(
-  fs.readFileSync("/Users/chaud/.config/solana/id.json", { encoding: "utf-8" })
-);
-
-const secretKey = Uint8Array.from(secret);
-
-const keyPair = Keypair.fromSecretKey(secretKey);
-
-console.log("Secret Key:", keyPair.secretKey);
-console.log("Public Key:", keyPair.publicKey.toBase58());
+ 
+const keypair = Keypair.generate();
+ 
+console.log(`The public key is: `, keypair.publicKey.toBase58());
+console.log(`The secret key is: `, keypair.secretKey);
+console.log(`✅ Finished!`);
